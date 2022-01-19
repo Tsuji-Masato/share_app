@@ -8,9 +8,77 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-left-nav">
+          <%= link_to image_tag("logo.png"), "/" %>
+          <form action="https://presite-potepancamp-rails-02.herokuapp.com/rooms/search" accept-charset="UTF-8" method="get">
+            <div class="header-sharch d-lg-inline-block d-none">
+              <input type="text" name="area" id="area" value="" class="form-control" placeholder="エリア">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="header-sharch d-lg-inline-block d-none">
+              <input type="text" name="keyword" id="keyword" value="" class="form-control" placeholder="キーワード">
+              <i class="fas fa-search"></i>
+            </div>
+            <input type="submit" name="commit" value="" class="d-none" data-disable-with="">
+          </form>
+        </div>
+        <div class="header-right-nav">
+          <% if user_signed_in? %>
+            <div class="nav-item d-sm-inline-block d-none">
+              <%= current_user.username %>
+            </div>
+            <div class="nav-item">
+            <img class="mx-3 p-1 host-icon nav-trigger" alt="メニュー" >
+              <ul class="header-nav-menu">
+                <li><a>ルーム登録</a></li>
+                <li><a>予約済みルーム一覧</a></li>
+                <li><a>登録済みルーム一覧</a></li>
+                <li><%= link_to "設定", users_account_index_path %></li>
+                <li><%= link_to "ログアウト", destroy_user_session_path,　method: :delete %></li>
+              </ul>
+            </div>
+            <% else %>
+            <div class="nav-item">
+              <%= link_to "ログイン", new_user_session_path, class: "btn btn-primary my-2 mx-3" %>
+              <%= link_to "新規登録", new_user_registration_path, class: "btn btn-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </header>
+    
+    <div class="clearfix"></div>
+    
+    <script>
+      $(function() {
+        $('.nav-trigger').click(function() {
+          $('.header-nav-menu').toggle(1500);
+        })
+      });
+    </script>
+
+    <% if flash[:notice] %>
+      <div class="notifications">
+        <div class="notice"><%= notice %></div>
+      </div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="notifications">
+        <div class="alert"><%= alert %></div>
+      </div>
+    <% end %>
+
     <%= yield %>
+
+    <footer class="footer">
+      <p>© 2020 POTEPAN.INC.</p>
+    </footer>
+
   </body>
 </html>

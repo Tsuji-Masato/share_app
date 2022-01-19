@@ -1,3 +1,12 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  namespace :users do
+    resources :account,  only: :index
+    resources :profile,  only: [:edit, :update]
+  end
+  devise_scope :user do
+    get '/users/sign_out' => 'devise/sessions#destroy'
+  end
+  devise_for :users
+  root to: "top#index"
+  resources :users
 end
